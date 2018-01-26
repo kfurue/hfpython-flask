@@ -9,10 +9,16 @@ def hello() -> str:
 
 
 @app.route('/search4', methods=['POST'])
-def do_search() -> str:
+def do_search() -> 'html':
     phrase = request.form['phrase']
     letters = request.form['letters']
-    return str(search4letters(phrase, letters))
+    results = str(search4letters(phrase, letters))
+    title = 'Here are your results:'
+    return render_template('results.html',
+                            the_title = title,
+                            the_phrase = phrase,
+                            the_letters = letters,
+                            the_results = results)
 
 
 @app.route('/entry')
