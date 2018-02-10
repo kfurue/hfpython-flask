@@ -5,6 +5,7 @@ Flask==0.12.2
 itsdangerous==0.24
 Jinja2==2.10
 MarkupSafe==1.0
+mysql-connector-python==2.1.7
 pep8==1.7.1
 py==1.5.2
 pytest==3.2.5
