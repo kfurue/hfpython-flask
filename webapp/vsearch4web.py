@@ -37,7 +37,10 @@ def do_search() -> 'html':
     letters = request.form['letters']
     results = str(search4letters(phrase, letters))
     title = 'Here are your results:'
-    log_request(request, results)
+    try:
+        log_request(request, results)
+    except Exception as err:
+        print('****Logging failed with this error:', str(err))
     return render_template('results.html',
                             the_title = title,
                             the_phrase = phrase,
@@ -55,16 +58,19 @@ def entry_page() -> 'html':
 @app.route('/viewlog')
 @check_logged_in
 def view_the_log() -> 'html':
-    with UseDatabase(app.config['dbconfig']) as cursor:
-        _SQL = """select phrase, letters, ip, browser_string, results
-                  from log"""
-        cursor.execute(_SQL)
-        contents = cursor.fetchall()
-        titles = ('Phrase', 'Letters', 'Remote_addr', 'User_agent', 'Results')
-        return render_template('viewlog.html',
-                                the_title='View Log',
-                                the_row_titles=titles,
-                                the_data=contents)
+    try:
+        with UseDatabase(app.config['dbconfig']) as cursor:
+            _SQL = """select phrase, letters, ip, browser_string, results
+                    from log"""
+            cursor.execute(_SQL)
+            contents = cursor.fetchall()
+            titles = ('Phrase', 'Letters', 'Remote_addr', 'User_agent', 'Results')
+            return render_template('viewlog.html',
+                                    the_title='View Log',
+                                    the_row_titles=titles,
+                                    the_data=contents)
+    except Exception as err:
+        print('Something went wrong:', str(err))
 
 
 @app.route('/login')
